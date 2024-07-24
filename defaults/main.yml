@@ -1,1 +1,4 @@
 ---
+mozilla_apps:
+  - thunderbird
+  - firefox

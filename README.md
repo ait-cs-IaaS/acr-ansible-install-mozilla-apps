@@ -1,6 +1,6 @@
-# Ansible-Role: acr-ansible-install-thunderbird
+# Ansible-Role: acr-ansible-install-mozilla-apps
 
-AIT-CyberRange: Installs thunderbird via apt packages 
+AIT-CyberRange: Installs mozilla apps via apt packages
 
 
 ## Requirements
@@ -10,6 +10,9 @@ AIT-CyberRange: Installs thunderbird via apt packages
 ## Role Variables
 
 ```yaml
+mozilla_apps:
+  - thunderbird
+  - firefox
 ```
 
 ## Example Playbook
@@ -17,7 +20,12 @@ AIT-CyberRange: Installs thunderbird via apt packages
 ```yaml
 - hosts: all
   roles:
-    - acr-ansible-install-thunderbird
+    - role: acr-ansible-install-mozilla-apps
+      vars:
+        mozilla_apps:
+          - thunderbird
+          - firefox
+
 ```
 
 ## License
