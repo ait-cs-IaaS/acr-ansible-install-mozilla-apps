@@ -1,0 +1,48 @@
+---
+- name: Add Mozilla Team PPA
+  become: true
+  ansible.builtin.apt_repository:
+    repo: ppa:mozillateam/ppa
+
+- name: Configure APT pinning for Mozilla Team PPA and Thunderbird
+  become: true
+  ansible.builtin.copy:
+    dest: /etc/apt/preferences.d/thunderbird
+    content: |
+      Package: *
+      Pin: release o=LP-PPA-mozillateam
+      Pin-Priority: 1001
+
+      Package: thunderbird
+      Pin: version 2:1snap*
+      Pin-Priority: -1
+
+- name: Update APT cache
+  become: true
+  ansible.builtin.apt:
+    update_cache: true
+
+- name: Remove Thunderbird snap package
+  become: true
+  community.general.snap:
+    name: thunderbird
+    state: absent
+
+- name: Check if /usr/lib/thunderbird exists
+  ansible.builtin.stat:
+    path: /usr/lib/thunderbird
+  register: thunderbird_dir
+
+- name: Remove Thunderbird apt package
+  become: true
+  ansible.builtin.apt:
+    name: thunderbird
+    state: absent
+    autoremove: true
+  when: not thunderbird_dir.stat.exists
+
+- name: Install thunderbird
+  become: true
+  ansible.builtin.apt:
+    name: thunderbird
+    state: present
